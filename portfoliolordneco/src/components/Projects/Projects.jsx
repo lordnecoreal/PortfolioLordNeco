@@ -2,6 +2,9 @@
 import React, { useState, useEffect } from 'react';
 import './Projects.scss';
 
+// URL base do backend (onde ficam as imagens)
+const API_URL = 'https://portfolioback-end-9qjt.onrender.com';
+
 function Projects() {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -13,7 +16,7 @@ function Projects() {
     const fetchProjects = async () => {
       try {
         setLoading(true);
-        const response = await fetch('https://portfolioback-end-9qjt.onrender.com/projetos');
+        const response = await fetch(`${API_URL}/projetos`);
         
         if (!response.ok) {
           throw new Error(`Erro HTTP: ${response.status}`);
@@ -35,6 +38,15 @@ function Projects() {
 
   const handleImageError = (projectId) => {
     setImageErrors(prev => ({ ...prev, [projectId]: true }));
+  };
+
+  // Monta a URL completa da imagem
+  const getImageUrl = (imagem) => {
+    if (!imagem) return null;
+    // Se já for URL completa (http), usa direto (caso do Cloudinary no futuro)
+    if (imagem.startsWith('http')) return imagem;
+    // Senão, concatena com a URL do backend
+    return `${API_URL}${imagem}`;
   };
 
   // Estado de loading
@@ -76,7 +88,7 @@ function Projects() {
               <div className="project-image">
                 {!imageErrors[project.id] ? (
                   <img 
-                    src={project.imagem || '/imagensprojetos/placeholder.png'} 
+                    src={getImageUrl(project.imagem)} 
                     alt={project.nome}
                     className="project-img"
                     onError={() => handleImageError(project.id)}
