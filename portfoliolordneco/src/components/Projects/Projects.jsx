@@ -13,7 +13,7 @@ function Projects() {
     const fetchProjects = async () => {
       try {
         setLoading(true);
-        const response = await fetch('https://portfolioback-end-sja6.onrender.com/projetos');
+        const response = await fetch('https://portfolioback-end-9qjt.onrender.com/projetos');
         
         if (!response.ok) {
           throw new Error(`Erro HTTP: ${response.status}`);
